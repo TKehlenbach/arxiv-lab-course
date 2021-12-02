@@ -4,7 +4,8 @@ import os
 import glob
 
 basepath = os.getcwd()
-num_tables = len(glob.glob(basepath + "/citation-network-dataset/split-dataset/" + "*v13.json"))
+#num_tables = len(glob.glob(basepath + "/citation-network-dataset/split-dataset/" + "*v13.json"))
+num_tables = 54
 
 name = "citation-network-dataset/dblp.db"
 conn = sqlite3.connect(name)
