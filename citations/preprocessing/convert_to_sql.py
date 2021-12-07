@@ -1,20 +1,18 @@
 import pandas as pd
 import json
 import sqlite3
-import os
 import glob
 
-basepath = os.getcwd()
-num_files = len(glob.glob(basepath + "/citation-network-dataset/split-dataset/" + "*v13.json"))
+num_files = len(glob.glob("../citation-network-dataset/split-dataset/" + "*v13.json"))
 
 # Create database
-db_name = "citation-network-dataset/dblp.db"
+db_name = "../citation-network-dataset/dblp.db"
 db = open(db_name, 'w')
 db.close()
 
 for file in range(0, num_files):
     # Open JSON data
-    filename = "citation-network-dataset/split-dataset/dblp" + str(file) + ".v13.json"
+    filename = "../citation-network-dataset/split-dataset/dblp" + str(file) + ".v13.json"
     f_read = open(filename, 'rb')
     content = f_read.read()
     data = json.loads(content)
