@@ -12,13 +12,13 @@ columns = ['_id', 'title', 'venue', 'year', 'keywords', 'n_citation', 'lang',
 name = "../citations/citation-network-dataset/dblp.db"
 conn = sqlite3.connect(name)
 c = conn.cursor()
-create_table = '''CREATE TABLE IF NOT EXISTS citations('''
+create_table = '''CREATE TABLE IF NOT EXISTS complete_data('''
 for col in columns[:-1]:
     create_table += col + ''' TEXT,'''
 create_table += columns[-1] + ''' TEXT)'''
 
 c.execute(create_table)
-c.execute('''CREATE UNIQUE INDEX IF NOT EXISTS citations_id ON citations(_id)''')
+c.execute('''CREATE UNIQUE INDEX IF NOT EXISTS complete_data_id ON complete_data(_id)''')
 c.execute('''SELECT * FROM citations''')
 conn.commit()
 

@@ -6,13 +6,14 @@ df = pd.read_feather(name)
 df = df.replace('nan', np.nan)
 cols = ['id', 'year', 'timeline']
 timelines = pd.DataFrame(columns=cols)
+stop_at = 100000
 
 for idx, paper in df.iterrows():
     paper_id = paper['_id']
-    year = paper['year']
+    year = int(float(paper['year']))
 
     if paper_id not in timelines['id']:
-        temp = pd.DataFrame([[paper_id, 0, list()]], columns=cols)
+        temp = pd.DataFrame([[paper_id, int(0), list()]], columns=cols)
         timelines = timelines.append(temp)
 
     timelines.loc[timelines['id'] == paper_id, 'year'] = year
@@ -27,11 +28,16 @@ for idx, paper in df.iterrows():
         for r in refs:
 
             if r in timelines['id']:
+                print('append')
                 timelines.loc[timelines['id'] == r, 'timeline'] = timelines.at[timelines['id'] == r, 'timeline'].append(
                     year)
             else:
                 temp = pd.DataFrame([[paper_id, 0, list([year])]], columns=cols)
                 timelines = timelines.append(temp)
     print(idx)
-output = '../citation-network-dataset/timeline_data.feather'
+    if idx == stop_at:
+        break
+
+output = '../citation-network-dataset/timeline_data_small_testset.feather'
+timelines = timelines.reset_index()
 timelines.to_feather(output)
