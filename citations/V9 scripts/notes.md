@@ -5,7 +5,9 @@ Example row in binneddata.csv file :
 
 Explaination : 
 First two elements talk about the paper : 
+
   Paper ID : 15
+  
   Publishing Date : 1984
   
 The rest of the elements, grouped in two each talk about a particular year and the number of citations
