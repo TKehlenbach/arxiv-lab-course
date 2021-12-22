@@ -14,17 +14,19 @@ conn = sqlite3.connect(db_name)
 c = conn.cursor()
 
 # Define table
-columns = ['_id', 'title', #'venue',
+columns = ['_id', 'title', 'venue',
            'year', 'keywords',
-           'n_citation', 'lang', #'authors',
-           'fos', 'page_start',
+           'n_citation', 'lang', 'authors',
+           'fos',
+           'page_start',
            'page_end', 'volume', 'issue', 'issn', 'isbn',
            'doi', 'pdf', 'url', 'abstract', 'ref']
 
-datatypes = ['TEXT', 'TEXT', #'TEXT',
+datatypes = ['TEXT', 'TEXT', 'TEXT',
              'INT', 'TEXT[]',
-             'INT', 'TEXT', #'TEXT',
-             'TEXT', 'TEXT',
+             'INT', 'TEXT', 'TEXT',
+             'TEXT',
+             'TEXT',
              'TEXT', 'TEXT', 'TEXT', 'TEXT', 'TEXT',
              'TEXT', 'TEXT', 'TEXT[]', 'TEXT', 'TEXT[]']
 
@@ -40,11 +42,11 @@ c.execute(create_table)
 conn.commit()
 
 # Write to table
-num_files = len(glob.glob("../citation-network-dataset/split-dataset/" + "*v13.json"))
+num_files = len(glob.glob('../citation-network-dataset/split-dataset/' + '*v13.json'))
 
 for file in range(0, num_files):
     # Open JSON data
-    filename = "../citation-network-dataset/split-dataset/dblp" + str(file) + ".v13.json"
+    filename = '../citation-network-dataset/split-dataset/dblp' + str(file) + '.v13.json'
     f_read = open(filename, 'rb')
     content = f_read.read()
     data = json.loads(content)
@@ -52,6 +54,7 @@ for file in range(0, num_files):
     # Create a DataFrame From the JSON Data
     df = pd.DataFrame(data)
     df = df.rename(columns={'references': 'ref'})
+    df = df[columns]
     df = df.applymap(str)
     df['year'] = df['year'].astype(float)
     df['year'] = df['year'].replace(np.NaN, -1)
@@ -60,8 +63,6 @@ for file in range(0, num_files):
     df['n_citation'] = df['n_citation'].replace(np.NaN, -1)
     df['n_citation'] = df['n_citation'].astype(int)
     df['ref'] = df['ref'].replace(np.NaN, '')
-    df = df.drop(['venue', 'authors'], axis=1)
-    #print(type(df.loc[1, 'venue']))
 
     # Write to Database
     number_cols = len(columns) - 1
